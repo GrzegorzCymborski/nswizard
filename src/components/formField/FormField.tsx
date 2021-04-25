@@ -11,7 +11,7 @@ type FormFieldProps = {
   errorName?: string;
   isValid: boolean;
   isInvalid: boolean;
-  as?: "input";
+  as?: React.ElementType;
   children?: ReactNode;
   errorVisible: boolean;
   type?: string;

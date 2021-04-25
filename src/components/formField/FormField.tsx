@@ -1,4 +1,4 @@
-import React, { ReactNode, SyntheticEvent } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { InputGroup, FormControl } from 'react-bootstrap';
 
 type FormFieldProps = {

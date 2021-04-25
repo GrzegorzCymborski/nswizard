@@ -23,7 +23,7 @@ const StepTwo = () => {
   const { touched, errors, handleChange, handleSubmit, values, handleBlur } = useFormik({
     initialValues: {
       email: projectData.email || '',
-      newsletter: projectData.newsletter || null
+      newsletter: projectData.newsletter || ''
     },
     onSubmit: (val) => submitValues(val as Values),
     validationSchema: secondStepSchema,

@@ -1,4 +1,4 @@
-import React, { ReactNode, SyntheticEvent } from 'react';
+import React, { ElementType, ReactNode, SyntheticEvent } from 'react';
 import { InputGroup, FormControl } from 'react-bootstrap';
 
 type FormFieldProps = {
@@ -11,7 +11,7 @@ type FormFieldProps = {
   errorName?: string;
   isValid: boolean;
   isInvalid: boolean;
-  as?: React.ElementType;
+  as?: ElementType;
   children?: ReactNode;
   errorVisible: boolean;
   type?: string;

@@ -27,7 +27,6 @@ const Summary = () => {
       }
     } catch (error) {
       setIsError(true);
-      console.log('error!', error);
     }
   };
 

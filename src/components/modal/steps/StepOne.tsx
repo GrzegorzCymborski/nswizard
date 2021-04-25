@@ -29,7 +29,7 @@ const StepOne = () => {
       phone: projectData.phoneNumber || "",
       age: projectData.age || ''
     },
-    onSubmit: (values) => submitValues(values as Values),
+    onSubmit: (val) => submitValues(val as Values),
     validationSchema: firstStepSchema,
     validateOnChange: false
   });

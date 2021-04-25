@@ -25,7 +25,7 @@ const StepTwo = () => {
       email: projectData.email || '',
       newsletter: projectData.newsletter || null
     },
-    onSubmit: (values) => submitValues(values as Values),
+    onSubmit: (val) => submitValues(val as Values),
     validationSchema: secondStepSchema,
     validateOnChange: false
   });

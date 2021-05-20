@@ -37,19 +37,18 @@ export const counterSlice = createSlice({
     setMatched: (state, action) => {
       state.matched = action.payload;
     },
-    startNewGame: (state, action) => {
-      state.isNewGame = action.payload;
+    startNewGame: (state) => {
+      state.isNewGame = true;
     },
     setIsEndGame: (state) => {
-      state.isEndGame = false;
-      state.isNewGame = false;
+      state.isEndGame = true;
     },
     resetGame: (state) => {
       (state.mixedArray = []),
         (state.clickBlocked = false),
         (state.openedCard = []),
         (state.matched = []),
-        (state.isNewGame = true);
+        (state.isNewGame = false);
       state.isEndGame = false;
     }
   }

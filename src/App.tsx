@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { Container, Card, Button, Modal } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import Board from './components/Boards/Board';
+import GameModal from './components/GameModal/GameModal';
 import { useAppSelector } from './redux/hooks/reduxHooks';
 import {
   clearOpenCard,
   setCardsArray,
   setClickBlocked,
   setMatched,
-  startNewGame,
   resetGame,
-  setIsEndGame
+  setIsEndGame,
+  startNewGame
 } from './redux/project';
 
 const App = () => {
@@ -21,9 +22,13 @@ const App = () => {
     return [...cardsArr, ...cardsArr].sort(() => Math.random() - 0.5);
   };
 
+  const handleStartGame = () => {
+    dispatch(startNewGame());
+    dispatch(setCardsArray(mixAndSort(8)));
+  };
+
   const handleResetGame = () => {
     dispatch(resetGame());
-    dispatch(startNewGame(true));
     dispatch(setCardsArray(mixAndSort(8)));
   };
   const {
@@ -31,13 +36,15 @@ const App = () => {
   } = useAppSelector((state) => state);
 
   useEffect(() => {
-    if (openedCard.length < 2) return;
 
-    const firstMatched = mixedArray[openedCard[0]];
-    const secondMatched = mixedArray[openedCard[1]];
+    const [first, second] = openedCard;
+    const firstMatched = mixedArray[first];
+    const secondMatched = mixedArray[second];
 
     if (secondMatched && firstMatched === secondMatched) {
-      dispatch(setMatched([...matched, firstMatched]));
+      if (!matched.includes(secondMatched)) {
+        dispatch(setMatched([...matched, firstMatched]));
+      }
     }
 
     if (openedCard.length === 2) {
@@ -49,31 +56,17 @@ const App = () => {
     }
   }, [openedCard]);
 
-
-
   useEffect(() => {
-    if (matched.length === mixedArray.length / 2 && isNewGame) {
+    if (matched.length === mixedArray.length / 2 && matched.length) {
       dispatch(setIsEndGame());
     }
   }, [matched, matched]);
 
   return (
     <Container className="container-wrapper flex-column" fluid>
-      {isNewGame && <Button onClick={() => dispatch(setIsEndGame())}>Menu</Button>}
-      {!isNewGame && <Button onClick={handleResetGame}>Start game!</Button>}
-      {isNewGame && (
-        <Card className="card-wrapper">
-          <Board cardsArray={mixedArray} matched={matched} openedCard={openedCard} />
-        </Card>
-      )}
-      <Modal show={isEndGame} onHide={() => dispatch(startNewGame(true))}>
-        <Modal.Body className="text-center">You win!</Modal.Body>
-        <Modal.Footer className="d-flex justify-content-around">
-          <Button variant="secondary" onClick={handleResetGame}>
-            Play again
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {!isNewGame && <Button onClick={handleStartGame}>Start game!</Button>}
+      {isNewGame && <Board cardsArray={mixedArray} matched={matched} openedCard={openedCard} />}
+      <GameModal isEndGame={isEndGame} handleResetGame={handleResetGame} />
     </Container>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/hooks/reduxHooks';
-import { setGameScore, setOpenedCard } from '../../redux/project';
+import { url } from '../../config/api';
+import { useReduxHook } from '../../hooks/useReduxHook';
 
 type CardProps = {
   isFlipped: boolean;
@@ -9,19 +8,13 @@ type CardProps = {
   card: number;
 };
 
-const url = 'https://picsum.photos/20';
-
 const CardElement = ({ index, isFlipped, card }: CardProps) => {
-  const dispatch = useDispatch();
-
-  const {
-    projectData: { clickBlocked, openedCard }
-  } = useAppSelector((state) => state);
+  const { clickBlocked, openedCard, dispatch_setGamescore, dispatch_openedCard } = useReduxHook();
 
   function flipCard(index: number) {
-    dispatch(setGameScore())
+    dispatch_setGamescore();
     if (!clickBlocked && index !== openedCard[0]) {
-      dispatch(setOpenedCard(index));
+      dispatch_openedCard(index);
     }
   }
 

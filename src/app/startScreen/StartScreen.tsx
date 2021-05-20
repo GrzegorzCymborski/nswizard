@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
-import UseReduxHook from '../../hooks/useReduxHook';
+import { useReduxHook } from '../../hooks/useReduxHook';
 
 const StartScreen = () => {
-  const { handleStartGame, dispatch_userName, toggleScoreBoard } = UseReduxHook();
+  const { handleStartGame, dispatch_userName, toggleScoreBoard } = useReduxHook();
   const [playerName, setPlayerName] = useState('');
   const nameLength = playerName.length;
 
@@ -12,8 +12,8 @@ const StartScreen = () => {
     handleStartGame();
   };
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Body>
+    <Card>
+      <Card.Body className="d-flex flex-column ">
         <Card.Title>Welcome to NS Memo!</Card.Title>
         <Form.Group controlId="userName">
           <Form.Control
@@ -22,10 +22,12 @@ const StartScreen = () => {
             onChange={(e) => setPlayerName(e.target.value)}
           />
         </Form.Group>
-        <Button disabled={nameLength < 3} onClick={handleNameAndStart}>
+        <Button className="mb-2" size="sm" disabled={nameLength < 3} onClick={handleNameAndStart}>
           Start game!
         </Button>
-        <Button onClick={toggleScoreBoard}>Score table</Button>
+        <Button size="sm" onClick={toggleScoreBoard}>
+          Score table
+        </Button>
       </Card.Body>
     </Card>
   );

@@ -1,5 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../redux/hooks/reduxHooks';
+import { mixAndSort } from '../utils/sortArray';
+import { useStorageHook } from './useStorageHook';
 import {
   startNewGame,
   setCardsArray,
@@ -9,14 +11,18 @@ import {
   setIsEndGame,
   setMatched,
   setUserName,
-  showScoreBoard
+  showScoreBoard,
+  setGameScore,
+  setOpenedCard
 } from '../redux/project';
 
-const UseReduxHook = () => {
+export const useReduxHook = () => {
   const dispatch = useDispatch();
   const {
-    projectData: { mixedArray, openedCard, matched, isNewGame, isEndGame, gameScore, userName, scoresVisible }
+    projectData: { mixedArray, openedCard, matched, isNewGame, isEndGame, gameScore, scoresVisible, clickBlocked }
   } = useAppSelector((state) => state);
+
+  const { handleSaveScore } = useStorageHook();
 
   const [first, second] = openedCard;
   const firstMatched = mixedArray[first];
@@ -24,35 +30,26 @@ const UseReduxHook = () => {
   const pairMatch = secondMatched && firstMatched === secondMatched;
   const isGameWon = matched.length === mixedArray.length / 2 && matched.length;
 
-  const mixAndSort = (num: number) => {
-    const cardsArr = [...Array(num).keys()].map((i) => i + 1);
-    return [...cardsArr, ...cardsArr].sort(() => Math.random() - 0.5);
-  };
-
-  const dispatch_newGame = () => dispatch(startNewGame());
-  const dispatch_cardsArr = () => dispatch(setCardsArray(mixAndSort(2)));
-  const dispatch_resetGame = () => dispatch(resetGame());
-  const dispatch_blockClick = () => dispatch(setClickBlocked(true));
-  const dispatch_unblockClick = () => dispatch(setClickBlocked(false));
-  const dispatch_clearOpenCard = () => dispatch(clearOpenCard());
   const dispatch_endGame = () => dispatch(setIsEndGame());
   const dispatch_userName = (name: string) => dispatch(setUserName(name));
+  const dispatch_setGamescore = () => dispatch(setGameScore());
+  const dispatch_openedCard = (arg: number) => dispatch(setOpenedCard(arg));
 
   const handleResetGame = () => {
-    dispatch_resetGame();
-    dispatch_cardsArr();
+    dispatch(resetGame());
+    dispatch(setCardsArray(mixAndSort(8)));
   };
 
   const handleStartGame = () => {
-    dispatch_newGame();
-    dispatch_cardsArr();
+    dispatch(startNewGame());
+    dispatch(setCardsArray(mixAndSort(8)));
   };
 
   const cardFliping = () => {
-    dispatch_blockClick();
+    dispatch(setClickBlocked(true));
     setTimeout(() => {
-      dispatch_clearOpenCard();
-      dispatch_unblockClick();
+      dispatch(clearOpenCard());
+      dispatch(setClickBlocked(false));
     }, 500);
   };
 
@@ -62,15 +59,13 @@ const UseReduxHook = () => {
     }
   };
 
-  const handleSaveScore = () => {
-    const savedScores = localStorage.getItem('highscore table') || '[]';
-    const userScore = { userName: userName, score: gameScore };
-    const highscores = [...JSON.parse(savedScores), userScore].sort((b, a) => b.score - a.score);
-    localStorage.setItem('highscore table', JSON.stringify(highscores));
-  };
-
   const toggleScoreBoard = () => {
     dispatch(showScoreBoard(!scoresVisible));
+  };
+
+  const handleGameWon = () => {
+    handleSaveScore();
+    dispatch_endGame();
   };
 
   return {
@@ -90,8 +85,10 @@ const UseReduxHook = () => {
     dispatch_userName,
     handleSaveScore,
     toggleScoreBoard,
-    scoresVisible
+    scoresVisible,
+    handleGameWon,
+    dispatch_setGamescore,
+    dispatch_openedCard,
+    clickBlocked
   };
 };
-
-export default UseReduxHook;

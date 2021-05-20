@@ -59,11 +59,14 @@ export const counterSlice = createSlice({
       state.userName = action.payload;
     },
     resetGame: (state) => {
-      (state.mixedArray = []),
-        (state.clickBlocked = false),
-        (state.openedCard = []),
-        (state.matched = []),
-        (state.isNewGame = false);
+      state.mixedArray = [];
+      state.clickBlocked = false;
+      state.openedCard = [];
+      state.matched = [];
+      state.isNewGame = false;
+      state.gameScore = 0;
+      state.userName = '';
+      state.scoresVisible = false;
       state.isEndGame = false;
     }
   }

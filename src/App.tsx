@@ -1,28 +1,24 @@
 import React, { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
-import Board from './components/Boards/Board';
-import GameModal from './components/GameModal/GameModal';
-import ScoreTable from './components/ScoreTable/ScoreTable';
-import StartScreen from './components/StartScreen/StartScreen';
-import UseReduxHook from './hooks/useReduxHook';
+import Board from './app/boards/Board';
+import GameModal from './app/gameModal/GameModal';
+import Mainwrapper from './app/mainWrapper/MainWrapper';
+import ScoreTable from './app/scoreTable/ScoreTable';
+import StartScreen from './app/startScreen/StartScreen';
+import { useReduxHook } from './hooks/useReduxHook';
 
-const App = () => {
+export const App = () => {
   const {
-    dispatch_endGame,
-    mixedArray,
     openedCard,
     matched,
     isNewGame,
     isEndGame,
-    handleResetGame,
     isGameWon,
     cardFliping,
     pairMatch,
     saveMatched,
-    gameScore,
-    handleSaveScore,
-    scoresVisible
-  } = UseReduxHook();
+    scoresVisible,
+    handleGameWon
+  } = useReduxHook();
 
   useEffect(() => {
     if (pairMatch) saveMatched();
@@ -30,20 +26,15 @@ const App = () => {
   }, [openedCard]);
 
   useEffect(() => {
-    if (isGameWon) {
-      handleSaveScore();
-      dispatch_endGame();
-    }
+    if (isGameWon) handleGameWon();
   }, [matched, matched]);
 
   return (
-    <Container className="container-wrapper flex-column" fluid>
-      {isNewGame && <Board cardsArray={mixedArray} matched={matched} openedCard={openedCard} score={gameScore} />}
+    <Mainwrapper>
+      {isNewGame && <Board />}
       {!isNewGame && !scoresVisible && <StartScreen />}
       {!isNewGame && scoresVisible && <ScoreTable />}
-      <GameModal isEndGame={isEndGame} handleResetGame={handleResetGame} />
-    </Container>
+      <GameModal show={isEndGame} />
+    </Mainwrapper>
   );
 };
-
-export default App;

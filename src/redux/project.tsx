@@ -1,55 +1,68 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export type InitialStateProps = {
-  name: null | string;
-  age: null | number;
-  email: null | string;
-  phoneNumber: null | string;
-  newsletter: null | 'daily' | 'weekly' | 'monthly';
-  isModalOpen: boolean;
+  mixedArray: number[];
+  clickBlocked: boolean;
+  openedCard: number[];
+  matched: number[];
+  isNewGame: boolean;
+  isEndGame: boolean;
 };
 
 const initialState: InitialStateProps = {
-  name: null,
-  age: null,
-  email: null,
-  phoneNumber: null,
-  newsletter: null,
-  isModalOpen: false
+  mixedArray: [],
+  clickBlocked: false,
+  openedCard: [],
+  matched: [],
+  isNewGame: false,
+  isEndGame: false
 };
 
 export const counterSlice = createSlice({
-  name: 'user data',
+  name: 'memo game data',
   initialState,
   reducers: {
-    getName: (state, action) => {
-      state.name = action.payload;
+    setCardsArray: (state, action) => {
+      state.mixedArray = action.payload;
     },
-    getAge: (state, action) => {
-      state.age = action.payload;
+    setClickBlocked: (state, action) => {
+      state.clickBlocked = action.payload;
     },
-    getEmail: (state, action) => {
-      state.email = action.payload;
+    setOpenedCard: (state, action) => {
+      state.openedCard = [...state.openedCard, action.payload];
     },
-    getPhone: (state, action) => {
-      state.phoneNumber = action.payload;
+    clearOpenCard: (state) => {
+      state.openedCard = [];
     },
-    getNewsletter: (state, action) => {
-      state.newsletter = action.payload;
+    setMatched: (state, action) => {
+      state.matched = action.payload;
     },
-    getModalToggle: (state, action) => {
-      state.isModalOpen = action.payload;
+    startNewGame: (state, action) => {
+      state.isNewGame = action.payload;
     },
-    getClean: (state) => {
-      state.isModalOpen = false;
-      state.name = null;
-      state.age = null;
-      state.email = null;
-      state.phoneNumber = null;
-      state.newsletter = null;
+    setIsEndGame: (state) => {
+      state.isEndGame = false;
+      state.isNewGame = false;
+    },
+    resetGame: (state) => {
+      (state.mixedArray = []),
+        (state.clickBlocked = false),
+        (state.openedCard = []),
+        (state.matched = []),
+        (state.isNewGame = true);
+      state.isEndGame = false;
     }
   }
 });
 
-export const { getName, getAge, getEmail, getPhone, getNewsletter, getModalToggle, getClean } = counterSlice.actions;
+export const {
+  setCardsArray,
+  setClickBlocked,
+  setOpenedCard,
+  clearOpenCard,
+  setMatched,
+  startNewGame,
+  resetGame,
+  setIsEndGame
+} = counterSlice.actions;
 export default counterSlice.reducer;

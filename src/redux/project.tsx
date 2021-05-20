@@ -7,6 +7,9 @@ export type InitialStateProps = {
   matched: number[];
   isNewGame: boolean;
   isEndGame: boolean;
+  gameScore: number;
+  userName: string;
+  scoresVisible: boolean;
 };
 
 const initialState: InitialStateProps = {
@@ -15,7 +18,10 @@ const initialState: InitialStateProps = {
   openedCard: [],
   matched: [],
   isNewGame: false,
-  isEndGame: false
+  isEndGame: false,
+  gameScore: 0,
+  userName: '',
+  scoresVisible: false
 };
 
 export const counterSlice = createSlice({
@@ -37,11 +43,20 @@ export const counterSlice = createSlice({
     setMatched: (state, action) => {
       state.matched = action.payload;
     },
+    showScoreBoard: (state, action) => {
+      state.scoresVisible = action.payload;
+    },
     startNewGame: (state) => {
       state.isNewGame = true;
     },
     setIsEndGame: (state) => {
       state.isEndGame = true;
+    },
+    setGameScore: (state) => {
+      state.gameScore = state.gameScore += 1;
+    },
+    setUserName: (state, action) => {
+      state.userName = action.payload;
     },
     resetGame: (state) => {
       (state.mixedArray = []),
@@ -62,6 +77,9 @@ export const {
   setMatched,
   startNewGame,
   resetGame,
-  setIsEndGame
+  setIsEndGame,
+  setGameScore,
+  setUserName,
+  showScoreBoard
 } = counterSlice.actions;
 export default counterSlice.reducer;

@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Board from './components/Boards/Board';
 import GameModal from './components/GameModal/GameModal';
+import ScoreTable from './components/ScoreTable/ScoreTable';
+import StartScreen from './components/StartScreen/StartScreen';
 import UseReduxHook from './hooks/useReduxHook';
 
 const App = () => {
@@ -13,11 +15,13 @@ const App = () => {
     isNewGame,
     isEndGame,
     handleResetGame,
-    handleStartGame,
     isGameWon,
     cardFliping,
     pairMatch,
-    saveMatched
+    saveMatched,
+    gameScore,
+    handleSaveScore,
+    scoresVisible
   } = UseReduxHook();
 
   useEffect(() => {
@@ -26,13 +30,17 @@ const App = () => {
   }, [openedCard]);
 
   useEffect(() => {
-    if (isGameWon) dispatch_endGame();
+    if (isGameWon) {
+      handleSaveScore();
+      dispatch_endGame();
+    }
   }, [matched, matched]);
 
   return (
     <Container className="container-wrapper flex-column" fluid>
-      {!isNewGame && <Button onClick={handleStartGame}>Start game!</Button>}
-      {isNewGame && <Board cardsArray={mixedArray} matched={matched} openedCard={openedCard} />}
+      {isNewGame && <Board cardsArray={mixedArray} matched={matched} openedCard={openedCard} score={gameScore} />}
+      {!isNewGame && !scoresVisible && <StartScreen />}
+      {!isNewGame && scoresVisible && <ScoreTable />}
       <GameModal isEndGame={isEndGame} handleResetGame={handleResetGame} />
     </Container>
   );

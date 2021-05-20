@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../redux/hooks/reduxHooks';
-import { setOpenedCard } from '../../redux/project';
+import { setGameScore, setOpenedCard } from '../../redux/project';
 
 type CardProps = {
   isFlipped: boolean;
@@ -19,6 +19,7 @@ const CardElement = ({ index, isFlipped, card }: CardProps) => {
   } = useAppSelector((state) => state);
 
   function flipCard(index: number) {
+    dispatch(setGameScore())
     if (!clickBlocked && index !== openedCard[0]) {
       dispatch(setOpenedCard(index));
     }

@@ -7,13 +7,15 @@ import {
   setClickBlocked,
   clearOpenCard,
   setIsEndGame,
-  setMatched
+  setMatched,
+  setUserName,
+  showScoreBoard
 } from '../redux/project';
 
 const UseReduxHook = () => {
   const dispatch = useDispatch();
   const {
-    projectData: { mixedArray, openedCard, matched, isNewGame, isEndGame }
+    projectData: { mixedArray, openedCard, matched, isNewGame, isEndGame, gameScore, userName, scoresVisible }
   } = useAppSelector((state) => state);
 
   const [first, second] = openedCard;
@@ -28,12 +30,13 @@ const UseReduxHook = () => {
   };
 
   const dispatch_newGame = () => dispatch(startNewGame());
-  const dispatch_cardsArr = () => dispatch(setCardsArray(mixAndSort(8)));
+  const dispatch_cardsArr = () => dispatch(setCardsArray(mixAndSort(2)));
   const dispatch_resetGame = () => dispatch(resetGame());
   const dispatch_blockClick = () => dispatch(setClickBlocked(true));
   const dispatch_unblockClick = () => dispatch(setClickBlocked(false));
   const dispatch_clearOpenCard = () => dispatch(clearOpenCard());
   const dispatch_endGame = () => dispatch(setIsEndGame());
+  const dispatch_userName = (name: string) => dispatch(setUserName(name));
 
   const handleResetGame = () => {
     dispatch_resetGame();
@@ -59,11 +62,23 @@ const UseReduxHook = () => {
     }
   };
 
+  const handleSaveScore = () => {
+    const savedScores = localStorage.getItem('highscore table') || '[]';
+    const userScore = { userName: userName, score: gameScore };
+    const highscores = [...JSON.parse(savedScores), userScore].sort((b, a) => b.score - a.score);
+    localStorage.setItem('highscore table', JSON.stringify(highscores));
+  };
+
+  const toggleScoreBoard = () => {
+    dispatch(showScoreBoard(!scoresVisible));
+  };
+
   return {
     dispatch_endGame,
     mixedArray,
     openedCard,
     matched,
+    gameScore,
     isNewGame,
     isEndGame,
     handleResetGame,
@@ -71,7 +86,11 @@ const UseReduxHook = () => {
     isGameWon,
     cardFliping,
     pairMatch,
-    saveMatched
+    saveMatched,
+    dispatch_userName,
+    handleSaveScore,
+    toggleScoreBoard,
+    scoresVisible
   };
 };
 

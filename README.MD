@@ -1,35 +1,14 @@
+## Sample UI wizard
 
-# NS MEMO 🟩🟦
-
-Memory Game, The challenge is to match two cards, the game ends when 8 pairs are matched
-
-## Features
-
-- Unique Card pictures
-- Highscore table
-- RWD
+ [DEMO](https://nswizard.surge.sh/) / [Online VSC](https://github1s.com/GrzegorzCymborski/nswizard)
 
 
-  
-## Installation
-
-To install this project run
-
-```bash
-  npm run i
-```
-
-  
-## Demo
-
-http://nsmemo.surge.sh/
-  
 ## Tech Stack
+React / TypeScript / Vite / Redux Toolkit / Bootstrap / Formik / Yup / Eslint / Prettier / ❤
 
-ViteJS, React,TypeScript, Redux Toolkit, Bootstrap, SASS, ESlint, Prettier
-
-
-  
-## Screenshots
-
-![App Screenshot](https://i.imgur.com/e7KV1UC.png)
+## Installation
+```
+git clone https://github.com/GrzegorzCymborski/nswizard.git
+npm install
+npm run dev
+```
